@@ -1,6 +1,7 @@
 from netmiko import ConnectHandler
 import getpass
 import sys
+import os
 import time
 import ctypes  # An included library with Python install.
 
@@ -23,7 +24,11 @@ device = {
     'secret':'password'
     }
 ##opening IP file
-ipfile=open("E:\Desktop\Script for backup cisco\iplist.txt")
+#ipfile=open("E:\Desktop\Script for backup cisco\iplist.txt")
+user_input = input("Enter the path of your file: ")
+assert os.path.exists(user_input), "I did not find the file at, "+str(user_input)
+f = open(user_input,'r+')
+print("Hooray we found your file!")
 print ("Script to take backup of devices, Please enter your credential")
 device['username']=input("User name ")
 device['password']=getpass.getpass()
@@ -31,7 +36,7 @@ print("Enter enable password: ")
 device['secret']=getpass.getpass()
 
 ##taking backup
-for line in ipfile:
+for line in f:
  try:
      device['ip']=line.strip("\n")
 	 
@@ -53,5 +58,5 @@ for line in ipfile:
  except:
            print ("Access to "+device['ip']+" failed,backup did not taken")
 
-ipfile.close()
+f.close()
 print ("\nAll device backup completed")
